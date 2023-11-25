@@ -11,7 +11,7 @@
 %%% ```
 %%% @end
 %%%----------------------------------------------------------------------------
--module(simdjson).
+-module(simdjsone).
 -export([decode/1, parse/1, get/2]).
 -compile({no_auto_import, [get/2]}).
 

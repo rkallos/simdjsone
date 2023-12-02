@@ -242,12 +242,6 @@ static void resource_dtor(ErlNifEnv* env, void* arg)
   static_cast<dom::document*>(arg)->dom::document::~document();
 }
 
-static void resource_down(ErlNifEnv* env, void* obj, ErlNifPid*, ErlNifMonitor*)
-{
-  //fprintf(stderr, "--> Decrement resource ref %p\r\n", obj);
-  enif_release_resource(obj);
-}
-
 static int load(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info) {
   if (!enif_is_list(env, load_info)) {
     fprintf(stderr, "Arguments passed to the NIF loader must be list!\r\n");
@@ -257,7 +251,6 @@ static int load(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info) {
   auto flags          = (ErlNifResourceFlags)(ERL_NIF_RT_CREATE | ERL_NIF_RT_TAKEOVER);
   ErlNifResourceTypeInit rti{0};
   rti.dtor            = &resource_dtor;
-  rti.down            = &resource_down;
   JSON_RESOURCE       = enif_open_resource_type_x(env, "simjson_resource",
                                                   &rti, flags, nullptr);
   ATOM_OK             = enif_make_atom(env, "ok");
